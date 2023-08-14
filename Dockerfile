@@ -1,5 +1,7 @@
 FROM golang:1.20
 
+EXPOSE 80 
+
 WORKDIR /usr/src/app
 
 COPY go.mod ./
