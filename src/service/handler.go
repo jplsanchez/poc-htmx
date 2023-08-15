@@ -8,15 +8,12 @@ import (
 	"net/http"
 )
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	ctx, err := data.NewContext()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer ctx.Close()
+type Handler struct {
+	Repository data.Repository
+}
 
-	filmSlice, err := ctx.GetAllFilms()
+func (h Handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
+	filmSlice, err := h.Repository.GetAllFilms()
 	if err != nil {
 		log.Println(err)
 		return
@@ -32,20 +29,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AddMovieHandler(w http.ResponseWriter, r *http.Request) {
+func (h Handler) AddMovieHandler(w http.ResponseWriter, r *http.Request) {
 	film := model.Film{
 		Title:    r.PostFormValue("title"),
 		Director: r.PostFormValue("director"),
 	}
-
-	ctx, err := data.NewContext()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer ctx.Close()
-
-	if err := ctx.InsertFilm(film); err != nil {
+	if err := h.Repository.InsertFilm(film); err != nil {
 		log.Println(err)
 		return
 	}
