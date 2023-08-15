@@ -1,14 +1,15 @@
-package main
+package service
 
 import (
 	"html/template"
+	"htmx/src/data"
+	"htmx/src/model"
 	"log"
 	"net/http"
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-
-	ctx, err := NewContext()
+	ctx, err := data.NewContext()
 	if err != nil {
 		log.Println(err)
 		return
@@ -22,7 +23,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	temp := template.Must(template.ParseFiles("index.html"))
-	films := map[string][]Film{
+	films := map[string][]model.Film{
 		"Films": *filmSlice,
 	}
 
@@ -32,12 +33,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddMovieHandler(w http.ResponseWriter, r *http.Request) {
-	film := Film{
+	film := model.Film{
 		Title:    r.PostFormValue("title"),
 		Director: r.PostFormValue("director"),
 	}
 
-	ctx, err := NewContext()
+	ctx, err := data.NewContext()
 	if err != nil {
 		log.Println(err)
 		return

@@ -1,9 +1,9 @@
-package main
+package data
 
 import (
 	"database/sql"
 	"fmt"
-	"log"
+	"htmx/src/model"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -15,10 +15,7 @@ type Context struct {
 }
 
 func NewContext() (*Context, error) {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("Error loading .env file")
-	}
+	godotenv.Load()
 
 	connStr := os.Getenv("DSN")
 	db, err := sql.Open("mysql", connStr)
@@ -30,8 +27,6 @@ func NewContext() (*Context, error) {
 		return nil, fmt.Errorf("failed to ping: %v", err)
 	}
 
-	log.Println("Successfully connected to PlanetScale!")
-
 	return &Context{db}, nil
 }
 
@@ -39,15 +34,15 @@ func (ctx *Context) Close() error {
 	return ctx.db.Close()
 }
 
-func (ctx *Context) GetAllFilms() (*[]Film, error) {
+func (ctx *Context) GetAllFilms() (*[]model.Film, error) {
 	results, err := ctx.db.Query("SELECT Title, Director FROM Film")
 	if err != nil {
 		return nil, err
 	}
 
-	var films []Film
+	var films []model.Film
 	for results.Next() {
-		var film Film
+		var film model.Film
 		if err := results.Scan(&film.Title, &film.Director); err != nil {
 			return nil, err
 		}
@@ -56,7 +51,7 @@ func (ctx *Context) GetAllFilms() (*[]Film, error) {
 	return &films, nil
 }
 
-func (ctx *Context) InsertFilm(film Film) error {
+func (ctx *Context) InsertFilm(film model.Film) error {
 	insert, err := ctx.db.Query(fmt.Sprintf("INSERT INTO Film VALUES ( '%v', '%v' )", film.Title, film.Director))
 	if err != nil {
 		return err
