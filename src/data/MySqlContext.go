@@ -35,7 +35,7 @@ func (ctx *MySqlContext) Close() error {
 }
 
 func (ctx MySqlContext) GetAllFilms() (*[]model.Film, error) {
-	results, err := ctx.db.Query("SELECT Title, Director FROM Film")
+	results, err := ctx.db.Query("SELECT Title, Director FROM Film ORDER BY RegisterDate DESC LIMIT 10")
 	if err != nil {
 		return nil, err
 	}
