@@ -52,7 +52,7 @@ func (ctx MySqlContext) GetAllFilms() (*[]model.Film, error) {
 }
 
 func (ctx *MySqlContext) InsertFilm(film model.Film) error {
-	insert, err := ctx.db.Query(fmt.Sprintf("INSERT INTO Film VALUES ( '%v', '%v' )", film.Title, film.Director))
+	insert, err := ctx.db.Query(fmt.Sprintf("INSERT INTO Film (Title ,Director) VALUES ( '%v', '%v' )", film.Title, film.Director))
 	if err != nil {
 		return err
 	}
