@@ -61,7 +61,7 @@
             <!-- Add Films -->
             <h1>Add Film</h1>
 
-            <form hx-post="/add-film/" hx-target="#film-list" hx-swap="beforeend" hx-indicator="#spinner">
+            <form hx-post="/add-film/" hx-target="#film-list" hx-swap="afterbegin" hx-indicator="#spinner">
                 <div class="mb-2">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" class="form-control" name="title">
